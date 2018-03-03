@@ -3,6 +3,7 @@ package io.christoph.learn.messenger.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import io.christoph.learn.messenger.database.DatabaseClass;
 import io.christoph.learn.messenger.model.Message;
@@ -18,6 +19,18 @@ public class MessageService {
 	
 	public List<Message> getAllMessages() {
 		return new ArrayList<Message>(messages.values());
+	}
+	
+	public List<Message> getAllMessagesForYear(int year) {
+		return messages.values().stream()
+					.filter(predicated -> predicated.getCreated().getYear() == year)
+					.collect(Collectors.toList());
+	}
+	
+	public List<Message> getAllMessagesPaginated(int start, int size) {
+		List<Message> list = new ArrayList<>(messages.values());
+		//if (start + size > messages.size()) return list;
+		return list.subList(start, size);
 	}
 	
 	public Message getMessage(long id)
